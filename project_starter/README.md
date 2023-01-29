@@ -9,3 +9,46 @@ Students have to write the CloudFormation code using this YAML template for buil
 Students may use a JSON file for increasing the generic nature of the YAML code. For example, the JSON file contains a "ParameterKey" as "EnvironmentName" and "ParameterValue" as "UdacityProject". 
 
 In YAML code, the `${EnvironmentName}` would be substituted with `UdacityProject` accordingly.
+
+
+### Setup Instruction
+
+#### Mac / Linux
+
+1. Install `aws` command line tool, and configure 
+    - aws commandline configuration instruction is provided [here](https://docs.aws.amazon.com/cli/latest/userguide/getting-started-quickstart.html)
+
+2. In terminal, starting from the root folder, type the following command
+
+```
+cd project_starter
+make deploy
+```
+
+3. To delete stack after running, type the following command (starting in `<PROJECT_ROOT>/project_starter` folder)
+
+```
+make delete
+```
+
+#### Windows
+
+1. Install WSL to be able to run shell script files
+
+2. Install `aws` command line tool, and configure 
+    - aws commandline configuration instruction is provided [here](https://docs.aws.amazon.com/cli/latest/userguide/getting-started-quickstart.html)
+
+3. In terminal, starting from the root folder, type the following command
+
+```
+cd project_starter
+bash create.sh udagram-network final-project-starter-network.yml network-parameters.json
+bash create.sh udagram-server final-project-starter-server.yml server-parameters.json udagram-network
+```
+
+4. To delete stack after running, type the following command (starting in `<PROJECT_ROOT>/project_starter` folder)
+
+```
+bash delete.sh udagram-network
+bash delete.sh udagram-server
+```
