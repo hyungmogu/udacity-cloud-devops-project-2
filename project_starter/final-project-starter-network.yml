@@ -41,6 +41,7 @@ Resources:
   IAMS3ReadOnlyRole:
     Type: AWS::IAM::Role
     Properties:
+      RoleName: UdacityS3ReadOnlyEC2
       AssumeRolePolicyDocument:
         Version: "2012-10-17"
         Statement:
@@ -50,9 +51,6 @@ Resources:
                 - s3.amazonaws.com
             Action:
               - 'sts:AssumeRole'
-      Tags: 
-        - Key: Name 
-          Value: UdacityS3ReadOnlyEC2
 
   ProfileWithRolesForOurApp:
     Type: AWS::IAM::InstanceProfile
