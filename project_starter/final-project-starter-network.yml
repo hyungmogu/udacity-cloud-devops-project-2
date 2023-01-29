@@ -38,7 +38,7 @@ Resources:
   # never give too much permissions to your EC2 instances! if they get hacked, the permissions get hacked also!
   # in this example, I create a Role called UdacityS3ReadOnlyC2 and just give it a policy of S3 Read-Only Access
 
-  UdacityS3ReadOnlyEC2:
+  IAMS3ReadOnlyRole:
     Type: AWS::IAM::Role
     Properties:
       AssumeRolePolicyDocument:
@@ -50,10 +50,13 @@ Resources:
                 - s3.amazonaws.com
             Action:
               - 'sts:AssumeRole'
+      Tags: 
+        - Key: Name 
+          Value: UdacityS3ReadOnlyEC2
 
   ProfileWithRolesForOurApp:
     Type: AWS::IAM::InstanceProfile
-    DependsOn: UdacityS3ReadOnlyEC2
+    DependsOn: IAMS3ReadOnlyRole
     Properties: 
       Roles:
         - UdacityS3ReadOnlyEC2
