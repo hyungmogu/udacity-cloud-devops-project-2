@@ -272,7 +272,7 @@ Resources:
             TargetGroupARNs:
             - Ref: WebAppTargetGroup
 
-    # =========== Security Group
+    # =========== Security Group ===========
 
     LBSecGroup:
         Type: AWS::EC2::SecurityGroup
