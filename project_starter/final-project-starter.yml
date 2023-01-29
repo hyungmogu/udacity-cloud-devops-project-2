@@ -74,23 +74,7 @@ Resources:
       - Fn::ImportValue: !Sub "${EnvironmentName}-PUB2-SN"
       SecurityGroups:
       - Ref: LBSecGroup
-
-  HTTPlistener:
-    Type: "AWS::ElasticLoadBalancingV2::Listener"
-    Properties:
-      DefaultActions:
-        - Type: "redirect"
-          RedirectConfig:
-            Protocol: "HTTPS"
-            Port: 443
-            Host: "#{host}"
-            Path: "/#{path}"
-            Query: "#{query}"
-            StatusCode: "HTTP_301"
-      LoadBalancerArn: !Ref myLoadBalancer
-      Port: 80
-      Protocol: "HTTP"
-
+      
   Listener:
     Type: AWS::ElasticLoadBalancingV2::Listener
     Properties:
@@ -102,19 +86,7 @@ Resources:
         Ref: WebAppLB
       Port: '80'
       Protocol: HTTP
-
-  ALBListenerRule:
-    Type: AWS::ElasticLoadBalancingV2::ListenerRule
-    Properties:
-      Actions:
-      - Type: forward
-        TargetGroupArn: !Ref 'WebAppTargetGroup'
-      Conditions:
-      - Field: path-pattern
-        Values: [/]
-      ListenerArn: !Ref 'Listener'
-      Priority: 1
-
+      
   PublicSubnet1: 
     Type: AWS::EC2::Subnet
     Properties:
@@ -340,7 +312,8 @@ Resources:
       HealthCheckProtocol: HTTP
       HealthCheckTimeoutSeconds: 8
       HealthyThresholdCount: 2
-      Port: 80
+      Port: 
+      
       Protocol: HTTP
       UnhealthyThresholdCount: 5
       VpcId: 
