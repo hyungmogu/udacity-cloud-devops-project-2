@@ -97,7 +97,7 @@ Resources:
       DefaultActions:
         - Type: forward
           TargetGroupArn:
-          Ref: WebAppTargetGroup
+            Ref: WebAppTargetGroup
       LoadBalancerArn:
         Ref: WebAppLB
       Port: '80'
@@ -108,10 +108,10 @@ Resources:
     Properties:
       Actions:
       - Type: forward
-      TargetGroupArn: !Ref 'WebAppTargetGroup'
+        TargetGroupArn: !Ref 'WebAppTargetGroup'
       Conditions:
       - Field: path-pattern
-      Values: [/]
+        Values: [/]
       ListenerArn: !Ref 'Listener'
       Priority: 1
 
