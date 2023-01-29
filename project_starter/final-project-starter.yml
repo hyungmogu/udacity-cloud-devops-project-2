@@ -5,33 +5,33 @@ Parameters:
   # VPCs and so on.
 
   EnvironmentName:
-      Description: An environment name that will be prefixed to resource names
-      Type: String
+    Description: An environment name that will be prefixed to resource names
+    Type: String
 
   VpcCIDR: 
-      Description: Please enter the IP range (CIDR notation) for this VPC
-      Type: String
-      Default: 10.0.0.0/16
+    Description: Please enter the IP range (CIDR notation) for this VPC
+    Type: String
+    Default: 10.0.0.0/16
 
   PublicSubnet1CIDR:
-      Description: Please enter the IP range (CIDR notation) for the public subnet in the first Availability Zone
-      Type: String
-      Default: 10.0.0.0/24
-  
+    Description: Please enter the IP range (CIDR notation) for the public subnet in the first Availability Zone
+    Type: String
+    Default: 10.0.0.0/24
+
   PublicSubnet2CIDR:
-      Description: Please enter the IP range (CIDR notation) for the public subnet in the second Availability Zone
-      Type: String
-      Default: 10.0.1.0/24
-      
+    Description: Please enter the IP range (CIDR notation) for the public subnet in the second Availability Zone
+    Type: String
+    Default: 10.0.1.0/24
+    
   PrivateSubnet1CIDR:
-      Description: Please enter the IP range (CIDR notation) for the private subnet in the first Availability Zone
-      Type: String
-      Default: 10.0.2.0/24
+    Description: Please enter the IP range (CIDR notation) for the private subnet in the first Availability Zone
+    Type: String
+    Default: 10.0.2.0/24
 
   PrivateSubnet2CIDR:
-      Description: Please enter the IP range (CIDR notation) for the private subnet in the second Availability Zone
-      Type: String
-      Default: 10.0.3.0/24
+    Description: Please enter the IP range (CIDR notation) for the private subnet in the second Availability Zone
+    Type: String
+    Default: 10.0.3.0/24
 
 Resources:
   # instace profile contains the IAM Role name(s) that we want to associate to our auto scaling EC2 Servers
@@ -63,17 +63,17 @@ Resources:
   InternetGatewayAttachment:
     Type: AWS::EC2::VPCGatewayAttachment
     Properties:
-        InternetGatewayId: !Ref InternetGateway
-        VpcId: !Ref VPC
+      InternetGatewayId: !Ref InternetGateway
+      VpcId: !Ref VPC
 
   WebAppLB:
     Type: AWS::ElasticLoadBalancingV2::LoadBalancer
     Properties:
-        Subnets:
-        - Fn::ImportValue: !Sub "${EnvironmentName}-PUB1-SN"
-        - Fn::ImportValue: !Sub "${EnvironmentName}-PUB2-SN"
-        SecurityGroups:
-        - Ref: LBSecGroup
+      Subnets:
+      - Fn::ImportValue: !Sub "${EnvironmentName}-PUB1-SN"
+      - Fn::ImportValue: !Sub "${EnvironmentName}-PUB2-SN"
+      SecurityGroups:
+      - Ref: LBSecGroup
 
   HTTPlistener:
     Type: "AWS::ElasticLoadBalancingV2::Listener"
@@ -248,102 +248,102 @@ Resources:
       NatGatewayId: !Ref NatGateway2
 
   PrivateSubnet2RouteTableAssociation:
-      Type: AWS::EC2::SubnetRouteTableAssociation
-      Properties:
-          RouteTableId: !Ref PrivateRouteTable2
-          SubnetId: !Ref PrivateSubnet2
+    Type: AWS::EC2::SubnetRouteTableAssociation
+    Properties:
+      RouteTableId: !Ref PrivateRouteTable2
+      SubnetId: !Ref PrivateSubnet2
 
   WebAppLaunchConfig:
-      Type: AWS::AutoScaling::LaunchConfiguration
-      Properties:
-          UserData:
-              Fn::Base64: !Sub |
-              #!/bin/bash
-              apt-get update -y
-              apt-get install apache2 -y
-              systemctl start apache2.service
-              cd /var/www/html
-              echo "Udacity Demo Web Server Up and Running!" > index.html          
-          # ToDo: AMI ID of Ubuntu Linux machine. Too get one, try creating a VM from the web console. 
-          ImageId: ami-0ac73f33a1888c64a
-          # ToDo: Change the key-pair name, as applicable to you. 
-          KeyName: udagram_keypair
-          SecurityGroups:
-          - Ref: WebServerSecGroup
-          InstanceType: t3.medium
-          BlockDeviceMappings:
-          - DeviceName: "/dev/sdk"
-              Ebs:
-                  VolumeSize: '10'
+    Type: AWS::AutoScaling::LaunchConfiguration
+    Properties:
+      UserData:
+        Fn::Base64: !Sub |
+          #!/bin/bash
+          apt-get update -y
+          apt-get install apache2 -y
+          systemctl start apache2.service
+          cd /var/www/html
+          echo "Udacity Demo Web Server Up and Running!" > index.html          
+      # ToDo: AMI ID of Ubuntu Linux machine. Too get one, try creating a VM from the web console. 
+      ImageId: ami-0ac73f33a1888c64a
+      # ToDo: Change the key-pair name, as applicable to you. 
+      KeyName: udagram_keypair
+      SecurityGroups:
+      - Ref: WebServerSecGroup
+      InstanceType: t3.medium
+      BlockDeviceMappings:
+      - DeviceName: "/dev/sdk"
+        Ebs:
+          VolumeSize: '10'
   WebAppGroup:
-      Type: AWS::AutoScaling::AutoScalingGroup
-      Properties:
-          VPCZoneIdentifier:
-          - Fn::ImportValue: 
-              !Sub "${EnvironmentName}-PRIV-NETS"
-          LaunchConfigurationName:
-              Ref: WebAppLaunchConfig
-          MinSize: '2'
-          MaxSize: '2'
-          TargetGroupARNs:
-          - Ref: WebAppTargetGroup
+    Type: AWS::AutoScaling::AutoScalingGroup
+    Properties:
+      VPCZoneIdentifier:
+      - Fn::ImportValue: 
+        !Sub "${EnvironmentName}-PRIV-NETS"
+      LaunchConfigurationName:
+        Ref: WebAppLaunchConfig
+      MinSize: '2'
+      MaxSize: '2'
+      TargetGroupARNs:
+      - Ref: WebAppTargetGroup
 
   # =========== Security Group ===========
 
   LBSecGroup:
-      Type: AWS::EC2::SecurityGroup
-      Properties:
-          GroupDescription: Allow http to our load balancer
-          VpcId:
-              Fn::ImportValue:
-              !Sub "${EnvironmentName}-VPCID"
-          SecurityGroupIngress:
-          - IpProtocol: tcp
-              FromPort: 80
-              ToPort: 80
-              CidrIp: 0.0.0.0/0
-          SecurityGroupEgress:
-          - IpProtocol: tcp
-              FromPort: 80
-              ToPort: 80
-              CidrIp: 0.0.0.0/0
-  
+    Type: AWS::EC2::SecurityGroup
+    Properties:
+      GroupDescription: Allow http to our load balancer
+      VpcId:
+        Fn::ImportValue:
+        !Sub "${EnvironmentName}-VPCID"
+      SecurityGroupIngress:
+      - IpProtocol: tcp
+        FromPort: 80
+        ToPort: 80
+        CidrIp: 0.0.0.0/0
+      SecurityGroupEgress:
+      - IpProtocol: tcp
+        FromPort: 80
+        ToPort: 80
+        CidrIp: 0.0.0.0/0
+
   WebServerSecGroup:
-      Type: AWS::EC2::SecurityGroup
-      Properties:
-          GroupDescription: Allow http to our hosts
-          VpcId:
-              Fn::ImportValue:
-              !Sub "${EnvironmentName}-VPCID"
-          SecurityGroupIngress:
-          - IpProtocol: tcp
-              FromPort: 80
-              ToPort: 80
-              CidrIp: 0.0.0.0/0
-          - IpProtocol: tcp
-              FromPort: 22
-              ToPort: 22
-              CidrIp: 0.0.0.0/0
-          SecurityGroupEgress:
-          - IpProtocol: tcp
-              FromPort: 0
-              ToPort: 65535
-              CidrIp: 0.0.0.0/0
+    Type: AWS::EC2::SecurityGroup
+    Properties:
+      GroupDescription: Allow http to our hosts
+      VpcId:
+          Fn::ImportValue:
+          !Sub "${EnvironmentName}-VPCID"
+      SecurityGroupIngress:
+      - IpProtocol: tcp
+        FromPort: 80
+        ToPort: 80
+        CidrIp: 0.0.0.0/0
+      - IpProtocol: tcp
+        FromPort: 22
+        ToPort: 22
+        CidrIp: 0.0.0.0/0
+      SecurityGroupEgress:
+      - IpProtocol: tcp
+        FromPort: 0
+        ToPort: 65535
+        CidrIp: 0.0.0.0/0
 
   WebAppTargetGroup:
-      Type: AWS::ElasticLoadBalancingV2::TargetGroup
-      Properties:
-          HealthCheckIntervalSeconds: 10
-          HealthCheckPath: /
-          HealthCheckProtocol: HTTP
-          HealthCheckTimeoutSeconds: 8
-          HealthyThresholdCount: 2
-          Port: 80
-          Protocol: HTTP
-          UnhealthyThresholdCount: 5
-          VpcId: 
-              Fn::ImportValue:
-              Fn::Sub: "${EnvironmentName}-VPCID"
+    Type: AWS::ElasticLoadBalancingV2::TargetGroup
+    Properties:
+      HealthCheckIntervalSeconds: 10
+      HealthCheckPath: /
+      HealthCheckProtocol: HTTP
+      HealthCheckTimeoutSeconds: 8
+      HealthyThresholdCount: 2
+      Port: 80
+      Protocol: HTTP
+      UnhealthyThresholdCount: 5
+      VpcId: 
+        Fn::ImportValue:
+        Fn::Sub: "${EnvironmentName}-VPCID"
 
 Outputs: 
   # This is also optional.
@@ -351,69 +351,69 @@ Outputs:
   # for example, if you create a Load Balancer
   # it's nice to output the URL to it here, so that we don't have to go to the console to get it.
   VPC: 
-      Description: A reference to the created VPC
-      Value: !Ref VPC
-      Export:
-        Name: !Sub ${EnvironmentName}-VPCID
+    Description: A reference to the created VPC
+    Value: !Ref VPC
+    Export:
+      Name: !Sub ${EnvironmentName}-VPCID
   
   VPCPublicRouteTable:
-      Description: Public Routing
-      Value: !Ref PublicRouteTable
-      Export:
-        Name: !Sub ${EnvironmentName}-PUB-RT
+    Description: Public Routing
+    Value: !Ref PublicRouteTable
+    Export:
+      Name: !Sub ${EnvironmentName}-PUB-RT
 
   VPCPrivateRouteTable1:
-      Description: Private Routing AZ1
-      Value: !Ref PrivateRouteTable1
-      Export:
-        Name: !Sub ${EnvironmentName}-PRI1-RT
+    Description: Private Routing AZ1
+    Value: !Ref PrivateRouteTable1
+    Export:
+      Name: !Sub ${EnvironmentName}-PRI1-RT
 
   VPCPrivateRouteTable2:
-      Description: Private Routing AZ2
-      Value: !Ref PrivateRouteTable2
-      Export:
-        Name: !Sub ${EnvironmentName}-PRI2-RT
+    Description: Private Routing AZ2
+    Value: !Ref PrivateRouteTable2
+    Export:
+      Name: !Sub ${EnvironmentName}-PRI2-RT
 
   WebAppLoadBalancerDNSName:
-      Description: The URL of the created web app load balancer
-      Value: !Join ["", [ "http://", !GetAtt WebAppLB.DNSName]]
-      Export:
-          Name: !Sub ${EnvironmentName}-LB-DNS
+    Description: The URL of the created web app load balancer
+    Value: !Join ["", [ "http://", !GetAtt WebAppLB.DNSName]]
+    Export:
+        Name: !Sub ${EnvironmentName}-LB-DNS
 
   PublicSubnets:
-      Description: A list of the public subnets
-      Value: !Join [ ",", [ !Ref PublicSubnet1, !Ref PublicSubnet2 ]]
-      Export:
-        Name: !Sub ${EnvironmentName}-PUB-NETS
+    Description: A list of the public subnets
+    Value: !Join [ ",", [ !Ref PublicSubnet1, !Ref PublicSubnet2 ]]
+    Export:
+      Name: !Sub ${EnvironmentName}-PUB-NETS
 
   PrivateSubnets:
-      Description: A list of the private subnets
-      Value: !Join [ ",", [ !Ref PrivateSubnet1, !Ref PrivateSubnet2 ]]
-      Export:
-        Name: !Sub ${EnvironmentName}-PRIV-NETS
+    Description: A list of the private subnets
+    Value: !Join [ ",", [ !Ref PrivateSubnet1, !Ref PrivateSubnet2 ]]
+    Export:
+      Name: !Sub ${EnvironmentName}-PRIV-NETS
 
   PublicSubnet1:
-      Description: A reference to the public subnet in the 1st Availability Zone
-      Value: !Ref PublicSubnet1
-      Export:
-        Name: !Sub ${EnvironmentName}-PUB1-SN
+    Description: A reference to the public subnet in the 1st Availability Zone
+    Value: !Ref PublicSubnet1
+    Export:
+      Name: !Sub ${EnvironmentName}-PUB1-SN
 
   PublicSubnet2: 
-      Description: A reference to the public subnet in the 2nd Availability Zone
-      Value: !Ref PublicSubnet2
-      Export:
-        Name: !Sub ${EnvironmentName}-PUB2-SN
+    Description: A reference to the public subnet in the 2nd Availability Zone
+    Value: !Ref PublicSubnet2
+    Export:
+      Name: !Sub ${EnvironmentName}-PUB2-SN
 
   PrivateSubnet1:
-      Description: A reference to the private subnet in the 1st Availability Zone
-      Value: !Ref PrivateSubnet1
-      Export:
-        Name: !Sub ${EnvironmentName}-PRI1-SN
+    Description: A reference to the private subnet in the 1st Availability Zone
+    Value: !Ref PrivateSubnet1
+    Export:
+      Name: !Sub ${EnvironmentName}-PRI1-SN
 
   PrivateSubnet2: 
-      Description: A reference to the private subnet in the 2nd Availability Zone
-      Value: !Ref PrivateSubnet2
-      Export:
-        Name: !Sub ${EnvironmentName}-PRI2-SN
+    Description: A reference to the private subnet in the 2nd Availability Zone
+    Value: !Ref PrivateSubnet2
+    Export:
+      Name: !Sub ${EnvironmentName}-PRI2-SN
 
   
