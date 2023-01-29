@@ -345,7 +345,7 @@ Resources:
       UnhealthyThresholdCount: 5
       VpcId: 
         Fn::ImportValue:
-        Fn::Sub: "${EnvironmentName}-VPCID"
+          Fn::Sub: "${EnvironmentName}-VPCID"
 
 Outputs: 
   # This is also optional.
