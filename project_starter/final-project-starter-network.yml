@@ -53,6 +53,7 @@ Resources:
 
   ProfileWithRolesForOurApp:
     Type: AWS::IAM::InstanceProfile
+    DependsOn: UdacityS3ReadOnlyEC2
     Properties: 
       Roles:
         - UdacityS3ReadOnlyEC2
