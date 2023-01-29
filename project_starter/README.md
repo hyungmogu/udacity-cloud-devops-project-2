@@ -18,7 +18,7 @@ In YAML code, the `${EnvironmentName}` would be substituted with `UdacityProject
 1. Install `aws` command line tool, and configure 
     - aws commandline configuration instruction is provided [here](https://docs.aws.amazon.com/cli/latest/userguide/getting-started-quickstart.html)
 
-2. In terminal, starting from the root folder, type the following command
+2. In terminal, starting from the project root folder (after downloading of this project is complete), type the following command
 
 ```
 cd project_starter
@@ -33,22 +33,24 @@ make delete
 
 #### Windows
 
-1. Install WSL to be able to run shell script files
+1. Install Ubunutu on WSL2 to be able to run shell script files
+
+2. Enter Ubuntu Terminal by typing `bash` in Command Prompt
+
+3. Install `make` package
 
 2. Install `aws` command line tool, and configure 
     - aws commandline configuration instruction is provided [here](https://docs.aws.amazon.com/cli/latest/userguide/getting-started-quickstart.html)
 
-3. In terminal, starting from the root folder, type the following command
+3. In Ubuntu Terminal, starting from the project root folder (after downloading of this project is complete), type the following command
 
 ```
 cd project_starter
-bash create.sh udagram-network final-project-starter-network.yml network-parameters.json
-bash create.sh udagram-server final-project-starter-server.yml server-parameters.json udagram-network
+make deploy
 ```
 
 4. To delete stack after running, type the following command (starting in `<PROJECT_ROOT>/project_starter` folder)
 
 ```
-bash delete.sh udagram-network
-bash delete.sh udagram-server
+make delete
 ```
