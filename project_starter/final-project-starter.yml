@@ -275,20 +275,22 @@ Resources:
       - DeviceName: "/dev/sdk"
         Ebs:
           VolumeSize: '10'
+
+  # =========== Server and Security Group ===========
   WebAppGroup:
     Type: AWS::AutoScaling::AutoScalingGroup
     Properties:
       VPCZoneIdentifier:
       - Fn::ImportValue: 
-        !Sub "${EnvironmentName}-PRIV-NETS"
+          !Sub "${EnvironmentName}-PRIV-NETS"
       LaunchConfigurationName:
         Ref: WebAppLaunchConfig
       MinSize: '2'
       MaxSize: '2'
       TargetGroupARNs:
       - Ref: WebAppTargetGroup
-
-  # =========== Security Group ===========
+      HealthCheckGracePeriod: 60
+      HealthCheckType: ELB
 
   LBSecGroup:
     Type: AWS::EC2::SecurityGroup
