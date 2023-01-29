@@ -41,7 +41,7 @@ Resources:
   S3ReadOnlyManagedPolicy:
     Type: AWS::IAM::ManagedPolicy
     Properties:
-      Description: AWS Policy for reading S3 database
+      Description: AWS Policy for reading S3
       PolicyDocument:
         Version: '2012-10-17'
         Statement:
