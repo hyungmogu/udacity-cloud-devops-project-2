@@ -10,6 +10,8 @@ Students may use a JSON file for increasing the generic nature of the YAML code.
 
 In YAML code, the `${EnvironmentName}` would be substituted with `UdacityProject` accordingly.
 
+### Load balancer URL
+- The load balancer url for this project is: http://udagr-webap-4kgekjw9tt4k-1400563281.us-east-1.elb.amazonaws.com/
 
 ### Setup Instruction
 
@@ -29,8 +31,8 @@ make deploy
 ```
 make delete
 ```
-<br/><br/>
-*Note:* Please refer to Cloudformation to check delete status as the command may or may not delete entire stack on the first try.
+<br/>
+**NOTE:** Please refer to Cloudformation to check delete status as the command may or may not delete entire stack on the first try.
 
 #### Windows
 
@@ -54,5 +56,5 @@ make deploy
 ```
 make delete
 ```
-<br/><br/>
-*Note:* Please refer to Cloudformation to check delete status as the command may or may not delete entire stack on the first try.
+<br/>
+**NOTE:** Please refer to Cloudformation to check delete status as the command may or may not delete entire stack on the first try.
