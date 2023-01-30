@@ -1,30 +1,56 @@
-## ND9991 - C2- Infrastructure as Code - Supporting Material and Starter Code
-This folder provides the supporting material and starter code for the "ND9991 - C2- Infrastructure as Code" course. This folder contains the following folders:
-1. project_starter - It contains the starter code.
-2. supporting_material - It contains the essential files (.yml, .json, .bat, .sh, and .jpeg) that were referred in the different lessons of this course.
-
-In addition to the current repo, there is one more repository, [nd9991-c2-Infrastructure-as-Code-v1-Exercises_Solution](https://github.com/udacity/nd9991-c2-Infrastructure-as-Code-v1-Exercises_Solution) that contains the solution to the exercises and video demos.  
-
-### Dependencies
-##### 1. AWS account
-You would require to have an AWS account to be able to build cloud infrastructure.
-
-##### 2. VS code editor
-An editor would be helpful to visualize the image as well as code. Download the VS Code editor [here](https://code.visualstudio.com/download).
-
-##### 3. An account on www.lucidchart.com
-A free user-account on [www.lucidchart.com](www.lucidchart.com) is required to be able to draw the web app architecture diagrams for AWS.
+### Project Title - Deploy a high-availability web app using CloudFormation
+This folder provides the starter code for the "ND9991 - C2- Infrastructure as Code - Deploy a high-availability web app using CloudFormation" project. This folder contains the following files:
 
 
-### How to run the supporting material?
-You can run the supporting material in two easy steps:
-```bash
-# Ensure that the AWS CLI is configured before runniing the command below
-# Create the network infrastructure
-# Check the region in the create.sh file
-./create.sh myFirstStack network.yml network-parameters.json
-# Create servers
-# Change the AMI ID and key-pair name in the servers.yml
-# Check the region in the update.sh file
-./update.sh mySecStack servers.yml server-parameters.json
+#### final-project-starter.yml
+Students have to write the CloudFormation code using this YAML template for building the cloud infrastructure, as required for the project. 
+
+#### server-parameters.json
+Students may use a JSON file for increasing the generic nature of the YAML code. For example, the JSON file contains a "ParameterKey" as "EnvironmentName" and "ParameterValue" as "UdacityProject". 
+
+In YAML code, the `${EnvironmentName}` would be substituted with `UdacityProject` accordingly.
+
+
+### Setup Instruction
+
+#### Mac / Linux
+
+1. Install `aws` command line tool, and configure 
+    - aws commandline configuration instruction is provided [here](https://docs.aws.amazon.com/cli/latest/userguide/getting-started-quickstart.html)
+
+2. In terminal, starting from the project root folder (after downloading of this project is complete), type the following command
+
+```
+cd project_starter
+make deploy
+```
+
+3. To delete stack after running, type the following command (starting in `<PROJECT_ROOT>/project_starter` folder)
+
+```
+make delete
+```
+
+#### Windows
+
+1. Install Ubunutu on WSL2 to be able to run shell script files
+
+2. Enter Ubuntu Terminal by typing `bash` in Command Prompt
+
+3. Install `make` package
+
+2. Install `aws` command line tool, and configure 
+    - aws commandline configuration instruction is provided [here](https://docs.aws.amazon.com/cli/latest/userguide/getting-started-quickstart.html)
+
+3. In Ubuntu Terminal, starting from the project root folder (after downloading of this project is complete), type the following command
+
+```
+cd project_starter
+make deploy
+```
+
+4. To delete stack after running, type the following command (starting in `<PROJECT_ROOT>/project_starter` folder)
+
+```
+make delete
 ```
