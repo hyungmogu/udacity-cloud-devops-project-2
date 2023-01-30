@@ -7,5 +7,5 @@ deploy:
 	sh create.sh udagram-server final-project-starter-server.yml server-parameters.json udagram-network
 
 delete:
-	sh delete.sh udagram-network &&\
+	sh delete.sh udagram-network
 	sh delete.sh udagram-server
