@@ -21,7 +21,6 @@ In YAML code, the `${EnvironmentName}` would be substituted with `UdacityProject
 2. In terminal, starting from the project root folder (after downloading of this project is complete), type the following command
 
 ```
-cd project_starter
 make deploy
 ```
 
@@ -30,6 +29,8 @@ make deploy
 ```
 make delete
 ```
+<br/><br/>
+*Note:* Please refer to Cloudformation to check delete status as the command may or may not delete entire stack on the first try.
 
 #### Windows
 
@@ -45,7 +46,6 @@ make delete
 3. In Ubuntu Terminal, starting from the project root folder (after downloading of this project is complete), type the following command
 
 ```
-cd project_starter
 make deploy
 ```
 
@@ -54,3 +54,5 @@ make deploy
 ```
 make delete
 ```
+<br/><br/>
+*Note:* Please refer to Cloudformation to check delete status as the command may or may not delete entire stack on the first try.
